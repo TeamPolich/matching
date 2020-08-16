@@ -1,40 +1,96 @@
 class Game {
+
     constructor(w, h) {
         this.sprites = []
         this.rows = 5
         this.cols = 8
         this.w = w
         this.h = h
-        this.visible1 = null
-        this.visible2 = null
+        this.visibleSprite1 = null
+        this.visibleSprite2 = null
+        this.visibleCard1 = null
+        this.visibleCard2 = null
+        this.board = this.generateGameBoard()
+    }
+
+    generateGameBoard() {
+        var board = []
+        for (var r=0; r < this.rows; r++) {
+            var row = []
+            for (var c=0; c < this.cols; c++) {
+                var p = Math.random();
+                if (p < 0.5) {
+                    card = new Card('Luke', 'static/luke.png', r, c)
+                } else {
+                    card = new Card('Kyle', 'static/kyle.png', r, c)
+                }
+                row.push(card)
+            }
+            board.push(row)
+        }
+        return board;
+    }
+
+    matches(card1, card2) {
+        if (card1.getName() == card2.getName()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    removeCard(card) {
+        const r = card.getRow();
+        const c = card.getColumn();
+        this.board[r][c] = null;
     }
 
     resetBoard() {
-        this.visible1 = null
-        this.visible2 = null
+        if (this.matches(this.visibleCard1, this.visibleCard2)) {
+            this.visibleSprite1.texture = PIXI.Texture.fromImage('static/empty.png');
+            this.visibleSprite2.texture = PIXI.Texture.fromImage('static/empty.png');
+            this.removeCard(this.visibleCard1);
+            this.removeCard(this.visibleCard2);
+        } else {
+            this.visibleSprite1.texture = PIXI.Texture.fromImage('static/frame.png');
+            this.visibleSprite2.texture = PIXI.Texture.fromImage('static/frame.png');
+        }
+        this.visibleSprite1 = null;
+        this.visibleSprite2 = null;
+        this.visibleCard1 = null;
+        this.visibleCard2 = null;
     }
 
     updateRound() {
-        var game = this
-        var card1 = this.visible1
-        var card2 = this.visible2
+        var game = this;
         setTimeout(function () {
-            card1.texture = PIXI.Texture.fromImage('static/frame.png');
-            card2.texture = PIXI.Texture.fromImage('static/frame.png');
             game.resetBoard();
         }, 1000);
     }
 
-    clickCard(sprite, eventData) {
-        // sprite.position.x += 10
-        // sprite.position.y += 10
-        console.log(eventData)
-        if (this.visible1 == null) {
-            sprite.texture = PIXI.Texture.fromImage('static/frame2.png');
-            this.visible1 = sprite;
-        } else if (this.visible2 == null) {
-            sprite.texture = PIXI.Texture.fromImage('static/frame2.png');
-            this.visible2 = sprite;
+    stillAvailable(card) {
+        var r = card.getRow();
+        var c = card.getColumn();
+        if (this.board[r][c] == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    clickCard(sprite, card, eventData) {
+        if (!this.stillAvailable(card)) {
+            return;
+        }
+        var img = card.getImage();
+        if (this.visibleSprite1 == null) {
+            sprite.texture = PIXI.Texture.fromImage(img);
+            this.visibleSprite1 = sprite;
+            this.visibleCard1 = card;
+        } else if (this.visibleSprite2 == null) {
+            sprite.texture = PIXI.Texture.fromImage(img);
+            this.visibleSprite2 = sprite;
+            this.visibleCard2 = card;
             this.updateRound();
         }
     }
@@ -75,11 +131,9 @@ class Game {
                 sprite.width = box_width - 2 * p;
                 sprite.height = box_height - 2 * p;
                 sprite.interactive = true;
-                sprite.on('mousedown', event => this.clickCard(sprite, event));
+                const card = this.board[r][c];
+                sprite.on('mousedown', event => this.clickCard(sprite, card, event));
                 stage.addChild(sprite);
-                // var x = graphics.drawRect(, , , );
-                // console.log(x);
-                // x.on('mousedown', event => this.clickCard(r, c, event));
             }
         }
     }

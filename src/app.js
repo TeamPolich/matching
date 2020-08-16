@@ -10,6 +10,8 @@ const app = new PIXI.Application({
 const displayDiv = document.querySelector('#display')
 displayDiv.appendChild(app.view);
 
+card = new Card(null, null);
+
 game = new Game(w, h)
 game.populate(app.stage)
 
