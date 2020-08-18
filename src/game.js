@@ -19,8 +19,10 @@ class Game {
             var row = []
             for (var c=0; c < this.cols; c++) {
                 var p = Math.random();
-                if (p < 0.5) {
-                    card = new Card('Luke', 'static/luke.png', r, c)
+                if (p < 0.33) {
+                    card = new Card('Naya', 'static/naya.png', r, c)
+                } else if (p < 0.66) {
+                    card = new Card('Yoshi', 'static/yoshi.png', r, c)
                 } else {
                     card = new Card('Kyle', 'static/kyle.png', r, c)
                 }
