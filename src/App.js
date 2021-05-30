@@ -2,6 +2,7 @@ import './App.css';
 import GameBoard from './GameBoard'
 import Game from './Game'
 
+
 function App() {
   const game = new Game(8,5)
   const mode = 'game'
