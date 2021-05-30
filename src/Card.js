@@ -8,7 +8,13 @@ function Card(props) {
     const h = 15
     const props2 = {x: props.x, y: props.y, width: props.w, height: props.h}
     return (
-        <Sprite texture={PIXI.Texture.from(bunny)} {...props2} />
+        <Sprite 
+            texture={PIXI.Texture.from(bunny)} 
+            interactive={true}
+            pointerup={() => {
+                console.log("click out");
+            }}
+            {...props2} />
     )
 }
 
