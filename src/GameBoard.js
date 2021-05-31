@@ -13,14 +13,14 @@ function GameBoard(props) {
     for (var r=0; r < rows; r++) {
         const row = []
         for (var c=0; c < cols; c++) {
-            const card = new Card({x: c * w, y: r * h, w, h})
+            const card = new Card({r, c, x: c * w, y: r * h, w, h})
             row.push(card)
         }
         board.push(row)
     }
     const game = props.game
     return (
-        <div className="BlogItem">
+        <div className="GameBoard">
           <Stage options={{ backgroundColor: 0x10bb99, height: 600, width: 800 }}>
             {board}
           </Stage>
