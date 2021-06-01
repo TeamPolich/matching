@@ -1,10 +1,17 @@
 import './App.css';
 import GameBoard from './GameBoard'
 import Game from './Game'
+import { useContext } from "react";
+import {GameContext} from "./GameContext";
 
 
 function App() {
-  const game = new Game(8,5)
+    const gameContext = useContext(GameContext);
+    console.log({gameContext})
+    const { gameBoard, setGameBoard, selectedCard, setSelectedCard } = gameContext;
+    console.log({ gameBoard, setGameBoard })
+    const game = new Game(8,5)
+    // setGameBoard(game)
   const mode = 'game'
   if (mode === 'title') {
     return (
