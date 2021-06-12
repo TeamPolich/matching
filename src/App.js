@@ -1,22 +1,18 @@
 import './App.css';
 import GameBoard from './GameBoard'
 import Game from './Game'
-import { useContext } from "react";
+import { useState } from "react";
 import {GameContext} from "./GameContext";
 
 
 function App() {
-    const gameContext = useContext(GameContext);
-    console.log({gameContext})
-    const { gameBoard, setGameBoard, selectedCard, setSelectedCard } = gameContext;
-    console.log({ gameBoard, setGameBoard })
+    const [mode, setMode] = useState("menu");
     const game = new Game(8,5)
-    // setGameBoard(game)
-  const mode = 'game'
-  if (mode === 'title') {
+  if (mode === 'menu') {
     return (
-      <div className="App">
-          <h1>menu</h1>
+      <div className="Menu">
+          <h1>Matching Game</h1>
+          <button onClick={() => setMode('game')} className="menu-button">Play</button>
       </div>
     );    
   } else {
