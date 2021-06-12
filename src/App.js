@@ -1,23 +1,56 @@
-import { render } from "react-dom";
-import React, { useReducer, useRef, useTick } from 'react';
-import { Sprite, Stage } from "react-pixi-fiber";
-import { Container, Texture } from '@pixi/display';
-import bunny from "./bunny.png";
-import * as PIXI from "pixi.js";
+import './App.css';
+import GameBoard from './GameBoard'
+import Game from './Game'
+import { useContext } from "react";
+import {GameContext} from "./GameContext";
 
-function Bunny(props) {
-  return <Sprite texture={PIXI.Texture.from(bunny)} {...props} />;
-}
+
+// https://codesandbox.io/s/q7oj1p0jo6?file=/RotatingBunny.js
 
 function App() {
-
-    // https://codesandbox.io/s/q7oj1p0jo6?file=/RotatingBunny.js
-
+    const gameContext = useContext(GameContext);
+    console.log({gameContext})
+    const { gameBoard, setGameBoard, selectedCard, setSelectedCard } = gameContext;
+    console.log({ gameBoard, setGameBoard })
+    const game = new Game(8,5)
+    // setGameBoard(game)
+  const mode = 'game'
+  if (mode === 'title') {
     return (
-        <Stage options={{ backgroundColor: 0x10bb99, height: 600, width: 800 }}>
-          <Bunny x={200} y={200} />
-        </Stage>
-    )
+      <div className="App">
+          <h1>menu</h1>
+      </div>
+    );    
+  } else {
+    const width = 800;
+    const height = 600;
+    return (
+      <div className="App">
+        <GameBoard game={game} width={width} height={height} />
+      </div>
+    );    
+  }
 }
 
 export default App;
+
+/*
+const app = new PIXI.Application({
+    width: w, height: h, 
+    backgroundColor: 0x333333, 
+    resolution: window.devicePixelRatio || 1,
+});
+
+const displayDiv = document.querySelector('#display')
+displayDiv.appendChild(app.view);
+
+card = new Card(null, null);
+
+game = new Game(w, h)
+game.populate(app.stage)
+
+app.ticker.add((delta) => {
+    game.tick();
+});
+
+*/
