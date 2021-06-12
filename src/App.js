@@ -1,20 +1,34 @@
 import './App.css';
 import GameBoard from './GameBoard'
 import GameContext from './GameContext'
-import Game from './Game'
-import React, { useState, useEffect, useContext } from "react";
+// import Game from './Game'
+import React, { useState } from "react";
 
 
 function resetBoard(props) {
     const initialBoard = []
     const cols = 8
     const rows = 5
+    
+    const slugs = []
+    while (slugs.length < cols * rows) {
+      var slug
+      if (Math.random() < 0.5) {
+        slug = './yoshi.png'
+      } else {
+        slug = './naya.png'
+      }
+      slugs.push(slug)
+      slugs.push(slug)
+    }
+
     const w = props.width / cols
     const h = props.height /rows
     for (var r=0; r < rows; r++) {
         const row = []
         for (var c=0; c < cols; c++) {
-            const cardData = {r, c, x: c * w, y: r * h, w, h, }
+            const s = slugs.pop()
+            const cardData = {r, c, x: c * w, y: r * h, w, h, visible: false, slug: s }
             row.push(cardData)
         }
         initialBoard.push(row)
@@ -22,10 +36,36 @@ function resetBoard(props) {
     return initialBoard
 }
 
+function updateGameState(gameDetails, r, c) {
+  const selected = gameDetails.selected
+  const board = gameDetails.board
+  var selected2
+  if (selected === undefined) {
+    board[r][c].visible = !board[r][c].visible
+    selected2 = { r, c }
+  } else {
+    const r2 = selected['r']
+    const c2 = selected['c']
+    // board[r][c].visible = false
+    // board[r2][c2].visible = false
+    // selected2 = undefined
+  }
+  // TODO: populate in pairs
+  // TODO: show first, show second, reset
+  // TODO: handle match
+  // TODO: handle fail
+  return { board, selected: selected2 }
+}
+
 function App() {
   const [mode, setMode] = useState("menu");
-  const game = new Game(8,5)
-  const board = resetBoard({ width: 800, height: 600 })
+  const [gameDetails, setGameDetails] = useState(() => {
+    return {
+      board: resetBoard({width: 800, height: 600}),
+      selected: undefined,
+      updateGameState
+    }
+  });
   if (mode === 'menu') {
     return (
       <div className="Menu">
@@ -37,16 +77,10 @@ function App() {
     const width = 800;
     const height = 600;
 
-function clickHandler(r, c) {
-  const { board } = React.useContext(GameContext)
-  console.log({board, r,c})  
-}
-
-
     return (
       <div className="App">
-        <GameContext.Provider value={{board, clickHandler}}>
-          <GameBoard width={width} height={height} />
+        <GameContext.Provider value={gameDetails}>
+          <GameBoard width={width} height={height} setGameDetails={setGameDetails} />
         </GameContext.Provider>
       </div>
     );    

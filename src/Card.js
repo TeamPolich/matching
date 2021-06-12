@@ -1,6 +1,6 @@
-import { Sprite, Stage } from "react-pixi-fiber";
+import { Sprite } from "react-pixi-fiber";
 import bunny from "./bunny.png";
-import React, { useState, useEffect, useContext } from "react";
+import React from "react";
 import * as PIXI from "pixi.js";
 import GameContext from './GameContext'
 
@@ -13,25 +13,38 @@ import GameContext from './GameContext'
 
 
 function Card(props) {
-    const { clickHandler } = React.useContext(GameContext)
-    const visible = false
+    const gameDetails = React.useContext(GameContext)
+    const board = gameDetails.board
+    const updateGameState = gameDetails.updateGameState
+    const setGameDetails = props.setGameDetails
     const x = props.x
     const y = props.y
     const r = props.r
     const c = props.c
-    const w = 100
-    const h = 15
-    const props2 = {x: x, y: y, width: props.w, height: props.h}
+    const slug = props.slug
+    const visible = props.visible
+    // const w = 100
+    // const h = 15
+    const props2 = {x, y, width: props.w, height: props.h}
     var texture = PIXI.Texture.from("frame.png")
     if (visible) {
-        texture = PIXI.Texture.from(bunny)
+        texture = PIXI.Texture.from(slug)
     }
+    console.log({texture})
+    const key = `c${r}${c}`
     return (
         <Sprite 
+            key={key}
             texture={texture}
             interactive={true}
             pointerup={() => {
-                clickHandler(r,c)
+                const {board, selected} = updateGameState(gameDetails, r, c)
+                setGameDetails((prevState) => ({
+                  ...prevState,
+                  board: board,
+                  selected: selected
+                }))
+                // console.log({d})
             }}
             {...props2} />
     )

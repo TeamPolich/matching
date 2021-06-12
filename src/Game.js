@@ -1,7 +1,4 @@
-import { Sprite, Stage } from "react-pixi-fiber";
-import bunny from "./bunny.png";
 import * as PIXI from "pixi.js";
-
 
 class Game {
 
@@ -19,7 +16,7 @@ class Game {
 
 
     matches(card1, card2) {
-        if (card1.getName() == card2.getName()) {
+        if (card1.getName() === card2.getName()) {
             return true;
         } else {
             return false;
@@ -106,8 +103,8 @@ class Game {
         graphics.lineStyle(1, 0xFF0000);
         var r = 0;
         var c = 0;
-        var ro = 20;
-        var co = 20;
+        // var ro = 20;
+        // var co = 20;
         const box_width = this.w / this.cols;
         const box_height = this.h / this.rows;
         const p = 5;
