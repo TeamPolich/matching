@@ -50,6 +50,7 @@ class Game {
 
     updateRound() {
         var game = this;
+        console.log({aadf:"adfaf"})
         setTimeout(function () {
             game.resetBoard();
         }, 1000);

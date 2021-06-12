@@ -2,15 +2,19 @@ import { Sprite, Stage } from "react-pixi-fiber";
 import bunny from "./bunny.png";
 import React, { useState, useEffect, useContext } from "react";
 import * as PIXI from "pixi.js";
+import GameContext from './GameContext'
 
-import {GameContext} from "./GameContext";
+// function decrement() {
+//     setState(prevState => {
+//         return { ...prevState, count: prevState.count - 1 }
+//     })
+// }
+
 
 
 function Card(props) {
-    const [visible, setVisible] = useState(false);
-    const gameContext = useContext(GameContext);
-    const { gameBoard, selectedCard, setSelectedCard } = gameContext;
-    // console.log({ gameBoard, selectedCard, setSelectedCard })
+    const { clickHandler } = React.useContext(GameContext)
+    const visible = false
     const x = props.x
     const y = props.y
     const r = props.r
@@ -27,9 +31,7 @@ function Card(props) {
             texture={texture}
             interactive={true}
             pointerup={() => {
-                console.log("click out");
-                console.log({r, c})
-                setVisible(!visible)
+                clickHandler(r,c)
             }}
             {...props2} />
     )

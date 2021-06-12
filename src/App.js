@@ -1,15 +1,31 @@
 import './App.css';
 import GameBoard from './GameBoard'
+import GameContext from './GameContext'
 import Game from './Game'
-import { useState } from "react";
-import {GameContext} from "./GameContext";
+import React, { useState, useEffect, useContext } from "react";
 
 
-// https://codesandbox.io/s/q7oj1p0jo6?file=/RotatingBunny.js
+function resetBoard(props) {
+    const initialBoard = []
+    const cols = 8
+    const rows = 5
+    const w = props.width / cols
+    const h = props.height /rows
+    for (var r=0; r < rows; r++) {
+        const row = []
+        for (var c=0; c < cols; c++) {
+            const cardData = {r, c, x: c * w, y: r * h, w, h, }
+            row.push(cardData)
+        }
+        initialBoard.push(row)
+    }
+    return initialBoard
+}
 
 function App() {
-    const [mode, setMode] = useState("menu");
-    const game = new Game(8,5)
+  const [mode, setMode] = useState("menu");
+  const game = new Game(8,5)
+  const board = resetBoard({ width: 800, height: 600 })
   if (mode === 'menu') {
     return (
       <div className="Menu">
@@ -20,33 +36,21 @@ function App() {
   } else {
     const width = 800;
     const height = 600;
+
+function clickHandler(r, c) {
+  const { board } = React.useContext(GameContext)
+  console.log({board, r,c})  
+}
+
+
     return (
       <div className="App">
-        <GameBoard game={game} width={width} height={height} />
+        <GameContext.Provider value={{board, clickHandler}}>
+          <GameBoard width={width} height={height} />
+        </GameContext.Provider>
       </div>
     );    
   }
 }
 
 export default App;
-
-/*
-const app = new PIXI.Application({
-    width: w, height: h, 
-    backgroundColor: 0x333333, 
-    resolution: window.devicePixelRatio || 1,
-});
-
-const displayDiv = document.querySelector('#display')
-displayDiv.appendChild(app.view);
-
-card = new Card(null, null);
-
-game = new Game(w, h)
-game.populate(app.stage)
-
-app.ticker.add((delta) => {
-    game.tick();
-});
-
-*/

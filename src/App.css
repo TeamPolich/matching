@@ -2,6 +2,16 @@
   text-align: center;
 }
 
+.Menu {
+}
+
+.menu-button {
+  font-size: 22pt;
+  padding: 20px;
+  min-width: 200px;
+  border-radius: 50px;
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
