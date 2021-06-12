@@ -11,6 +11,8 @@ function Bunny(props) {
 
 function App() {
 
+    // https://codesandbox.io/s/q7oj1p0jo6?file=/RotatingBunny.js
+
     return (
         <Stage options={{ backgroundColor: 0x10bb99, height: 600, width: 800 }}>
           <Bunny x={200} y={200} />
