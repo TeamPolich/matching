@@ -10,17 +10,21 @@ function resetBoard(props) {
     const cols = 8
     const rows = 5
     
-    const slugs = []
-    while (slugs.length < cols * rows) {
+    const oslugs = []
+    while (oslugs.length < cols * rows) {
       var slug
       if (Math.random() < 0.5) {
         slug = './yoshi.png'
       } else {
         slug = './naya.png'
       }
-      slugs.push(slug)
-      slugs.push(slug)
+      oslugs.push(slug)
+      oslugs.push(slug)
     }
+    let slugs = oslugs
+      .map((a) => ({sort: Math.random(), value: a}))
+      .sort((a, b) => a.sort - b.sort)
+      .map((a) => a.value)
 
     const w = props.width / cols
     const h = props.height /rows
@@ -28,7 +32,7 @@ function resetBoard(props) {
         const row = []
         for (var c=0; c < cols; c++) {
             const s = slugs.pop()
-            const cardData = {r, c, x: c * w, y: r * h, w, h, visible: false, slug: s }
+            const cardData = {r, c, x: c * w, y: r * h, w, h, visible: false, slug: s, solved: false }
             row.push(cardData)
         }
         initialBoard.push(row)
@@ -46,11 +50,17 @@ function updateGameState(gameDetails, r, c) {
   } else {
     const r2 = selected['r']
     const c2 = selected['c']
-    // board[r][c].visible = false
-    // board[r2][c2].visible = false
-    // selected2 = undefined
+    console.log(board)
+    console.log({a:board[r][c].slug, b:board[r2][c2].slug, r,c,r2,c2})
+    if (board[r][c].slug == board[r2][c2].slug) {
+      board[r][c].solved = true
+      board[r2][c2].solved = true
+    } else {
+      board[r][c].visible = false
+      board[r2][c2].visible = false      
+    }
+    selected2 = undefined
   }
-  // TODO: populate in pairs
   // TODO: show first, show second, reset
   // TODO: handle match
   // TODO: handle fail

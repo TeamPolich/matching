@@ -23,14 +23,17 @@ function Card(props) {
     const c = props.c
     const slug = props.slug
     const visible = props.visible
+    const solved = props.solved
     // const w = 100
     // const h = 15
     const props2 = {x, y, width: props.w, height: props.h}
     var texture = PIXI.Texture.from("frame.png")
-    if (visible) {
+    if (solved) {
+        texture = PIXI.Texture.from("empty.png")
+    }
+    else if (visible) {
         texture = PIXI.Texture.from(slug)
     }
-    console.log({texture})
     const key = `c${r}${c}`
     return (
         <Sprite 
