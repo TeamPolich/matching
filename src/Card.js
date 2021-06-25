@@ -1,6 +1,5 @@
 import { Sprite } from "react-pixi-fiber";
-import bunny from "./bunny.png";
-import React from "react";
+import React, { useState } from "react";
 import * as PIXI from "pixi.js";
 import GameContext from './GameContext'
 
@@ -13,6 +12,8 @@ import GameContext from './GameContext'
 
 
 function Card(props) {
+    const [mode, setMode] = useState();
+    const [revealed, setRevealed] = useState({})
     const gameDetails = React.useContext(GameContext)
     const board = gameDetails.board
     const updateGameState = gameDetails.updateGameState
@@ -41,13 +42,18 @@ function Card(props) {
             texture={texture}
             interactive={true}
             pointerup={() => {
-                const {board, selected} = updateGameState(gameDetails, r, c)
+                if (mode === 'pick-first') {
+                    setRevealed({r, c, slug})
+                    setMode('pick-second')
+                }
+                const {board, selected, waitUntil, waitAndClear} = updateGameState(gameDetails, r, c)
                 setGameDetails((prevState) => ({
-                  ...prevState,
                   board: board,
-                  selected: selected
+                  selected: selected,
+                  updateGameState: prevState.updateGameState, 
+                  waitUntil,
+                  waitAndClear
                 }))
-                // console.log({d})
             }}
             {...props2} />
     )
