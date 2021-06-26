@@ -1,20 +1,15 @@
-// import React, { useContext, useReducer } from "react";
-// import GameContext from './GameContext'
-// import reducer from './engine/reducer'
-
+import React, { useContext } from 'react';
+import { GameContext } from './App';
 
 function Menu() {
-  // const MyGameContext = useContext(GameContext)
-  // const [state, dispatch] = useReducer(reducer, MyGameContext)
-  // let start = () => {
-  //   dispatch( { mode: "pick-first" } )
-  // }
-          // <button onClick={start} className="menu-button">Play</button>
+  const gameContext = useContext(GameContext)
   return (
     <div className="Menu">
-          <h1>Matching Game</h1>
-      </div>
-  )
+      <h1>Matching Game</h1>
+      <button onClick={() => gameContext.dispatch({'event': 'start-game'})} className="menu-button">Play</button>
+    </div>
+  );
 }
 
 export default Menu;
+

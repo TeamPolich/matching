@@ -1,38 +1,38 @@
-
-function updateGameState(gameDetails, r, c) {
-  const selected = gameDetails.selected
-  const board = gameDetails.board
-  var waitFor = undefined
-  var waitAndClear = undefined
-  var selected2
-  if (selected === undefined) {
-    board[r][c].visible = !board[r][c].visible
-    selected2 = { r, c }
-  } else {
-    const r2 = selected['r']
-    const c2 = selected['c']
-    if (r === r2 && c === c2) {
-      selected2 = selected
-    } else {
-      if (board[r][c].slug === board[r2][c2].slug) {
-        board[r][c].solved = true
-        board[r2][c2].solved = true
-        waitAndClear = undefined
-        waitFor = undefined
+function resetBoard(props) {
+    const initialBoard = []
+    const cols = 8
+    const rows = 5
+    
+    const oslugs = []
+    while (oslugs.length < cols * rows) {
+      var slug
+      if (Math.random() < 0.5) {
+        slug = './yoshi.png'
       } else {
-        board[r][c].visible = !board[r][c].visible
-        waitAndClear = { a: {r, c}, b: {r: r2, c: c2} }
-        // board[r][c].visible = false
-        // board[r2][c2].visible = false
-        waitFor = 1000
+        slug = './naya.png'
       }
-      selected2 = undefined      
+      oslugs.push(slug)
+      oslugs.push(slug)
     }
-  }
-  // TODO: show first, show second, reset
-  // TODO: handle end game
-  console.log({r,c, waitFor, selected2, waitAndClear})
-  return { board, waitFor, selected: selected2, waitAndClear }
+    let slugs = oslugs
+      .map((a) => ({sort: Math.random(), value: a}))
+      .sort((a, b) => a.sort - b.sort)
+      .map((a) => a.value)
+
+    const w = props.width / cols
+    const h = props.height /rows
+    for (var r=0; r < rows; r++) {
+        const row = []
+        for (var c=0; c < cols; c++) {
+            const s = slugs.pop()
+            const cardData = {r, c, x: c * w, y: r * h, w, h, slug: s, solved: false }
+            row.push(cardData)
+        }
+        initialBoard.push(row)
+    }
+    return initialBoard
 }
 
-export default updateGameState
+const game = {resetBoard}
+
+export default game

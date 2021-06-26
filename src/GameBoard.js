@@ -1,46 +1,38 @@
+import './GameBoard.css';
 import { Stage } from "react-pixi-fiber";
 import Card from './Card'
-import GameContext from './GameContext'
-import React, { useState, useEffect } from "react";
-// import GameContext from './GameContext'
+import { GameContext } from './App';
+import React, { useContext, useEffect } from "react";
 
 
-function GameBoard(props) {
-    const [mode, setMode] = useState('pick-first')
-    const [timeLeft, setTimeLeft] = useState(60);
-    const [revealed, setRevealed] = useState({})
+function GameBoard() {
+  const gameContext = useContext(GameContext)
+  const {mode, board, instruction} = gameContext.game
+        console.log({mode})
 
     useEffect(() => {
-        if (!timeLeft) return;
-        // save intervalId to clear the interval when the component re-renders
-        const intervalId = setInterval(() => {
-            setTimeLeft(timeLeft - 1);
-            console.log('TODO: Update game board')
-        }, 1000);
-        // clear interval on re-render to avoid memory leaks
-        return () => clearInterval(intervalId);
-    }, [timeLeft]);
+        if (mode === 'wait') {
+            console.log("useEffect")
+            // save intervalId to clear the interval when the component re-renders
+            const intervalId = setInterval(() => {
+                console.log('TODO: Update game board')
+                gameContext.dispatch({'event': 'wait-complete'})
+            }, 1000);
+            // clear interval on re-render to avoid memory leaks
+            return () => clearInterval(intervalId);
+        }
+    }, [mode, gameContext]);
 
-
-    const gameDetails = React.useContext(GameContext);
-    const setGameDetails = props.setGameDetails
-    const board = gameDetails.board;
     const cards = []
     for (const row of board) {
         for (const item of row) {
-            const card = new Card({...item, setGameDetails})
+            const card = new Card({...item})
             cards.push(card)
         }
     }
-    var instruction
-    if (mode === 'pick-first') {
-        instruction = "Click on a card to flip it over"
-    } else{
-        instruction = "error"
-    }
     return (
         <div className="GameBoard">
-          <h1>{timeLeft}</h1>
+          <h1>hi</h1>
           <p>{instruction}</p>
           <Stage options={{ backgroundColor: 0x10bb99, height: 600, width: 800 }}>
             {cards}
