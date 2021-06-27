@@ -8,7 +8,6 @@ import React, { useContext, useEffect } from "react";
 function GameBoard() {
   const gameContext = useContext(GameContext)
   const {mode, board, instruction} = gameContext.game
-        console.log({mode})
 
     useEffect(() => {
         if (mode === 'wait') {
@@ -42,52 +41,4 @@ function GameBoard() {
 }
 
 export default GameBoard;
-
-
-
-/*
-
-
-import React, { useCallback, useState } from "react";
-import ReactDOM from "react-dom";
-import { Stage, usePixiTicker } from "react-pixi-fiber";
-import RotatingBunny from "./RotatingBunny";
-
-const height = 450;
-const width = 600;
-const OPTIONS = {
-  backgroundColor: 0x1099bb,
-  height: height,
-  width: width
-};
-
-function App() {
-  const [r, setR] = useState(0)
-  // const animate = useCallback((delta) => {
-  //   setR((r) => r + 0.1 * delta);
-  // }, []);
-  // usePixiTicker(animate);
-  return (
-    <Stage options={OPTIONS}>
-      <RotatingBunny x={r} y={height / 2} />
-    </Stage>
-  );
-}
-
-import { usePixiTicker } from "react-pixi-fiber";
-import Bunny from "./Bunny";
-
-// http://pixijs.io/examples/#/basics/basic.js
-function RotatingBunny(props) {
-  const [rotation, setRotation] = useState(0);
-  const animate = useCallback((delta) => {
-    setRotation((rotation) => rotation + 0.1 * delta);
-  }, []);
-  usePixiTicker(animate);
-
-  return <Bunny {...props} rotation={rotation} />;
-}
-
-export default RotatingBunny;
-*/
 
