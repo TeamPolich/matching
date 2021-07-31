@@ -7,7 +7,7 @@ import React, { useContext, useEffect } from "react";
 
 function GameBoard() {
   const gameContext = useContext(GameContext)
-  const {mode, board, instruction} = gameContext.game
+  const {mode, board, instruction, name} = gameContext.game
 
     useEffect(() => {
         if (mode === 'wait') {
@@ -31,7 +31,7 @@ function GameBoard() {
     }
     return (
         <div className="GameBoard">
-          <h1>hi</h1>
+          <h1>Welcome {name}</h1>
           <p>{instruction}</p>
           <Stage options={{ backgroundColor: 0x10bb99, height: 600, width: 800 }}>
             {cards}

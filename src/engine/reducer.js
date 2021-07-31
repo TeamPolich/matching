@@ -1,11 +1,20 @@
 import game from './game'
 import initialState from './initialize'
+const axios = require('axios');
 
 const reducer = (state, action) => {
   const event = action.event
   switch (event) {
     case 'start-game':
-      return {...state, mode: 'pick-first', instruction: 'Click a card', board: game.resetBoard({width: 800, height: 600})};
+      return {
+        ...state,
+        mode: 'pick-first',
+        instruction: 'Click a card',
+        board: game.resetBoard({width: 800, height: 600}),
+        name: action.name,
+        age: action.age,
+        start_time: (new Date()).getTime()
+    };
     case 'reset':
       return initialState;
     case 'card-click':
@@ -25,7 +34,7 @@ const reducer = (state, action) => {
             board[r][c].solved = true
             board[state.revealed.r][state.revealed.c].solved = true
             var nmode = "win"
-            var instruction = "You won!!!  Click anywhere to play again"
+            var instruction = "You won!!!  Click anywhere to play again."
             for (const row of board) {
               for (const cell of row) {
                 if (!cell.solved) {
@@ -34,10 +43,23 @@ const reducer = (state, action) => {
                 }
               }
             }
-            const out = {mode: nmode, board, revealed: undefined, revealed2: undefined, instruction }
+            const dur = (new Date()).getTime() - state.start_time
+            const data = { name: state.name, age: state.age, dur }
+            console.log({data})
+            if (nmode === "win") {
+              const url = 'https://por8ht9sv9.execute-api.us-east-1.amazonaws.com/api/matching/score'
+              axios.post(url, data)
+                .then(function(response) {
+                  console.log(response.data)
+                })
+                .catch(function (err) {
+                  console.log(err)
+                })              
+            }
+            const out = {...state, mode: nmode, board, revealed: undefined, revealed2: undefined, instruction }
             return out
           } else {
-            return {...state, mode: 'wait', revealed2: {r, c}, instruction: "Bad luck!"}
+            return { ...state,mode: 'wait', revealed2: {r, c}, instruction: "Bad luck!"}
           }
         }
       } else if (mode === 'wait') {
